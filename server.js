@@ -101,6 +101,12 @@ const { getSquad } = require('./routes/squad');
 
 app.get("/v1.0/squad", [middleware, pagination], getSquad);
 
+/* Get Channels */
+const { getChannels, getChannelById } = require('./routes/channels');
+
+app.get("/v1.0/channels", [middleware, pagination], getChannels);
+app.get("/v1.0/channels/:id", middleware, getChannelById);
+
 /* Users */
 const { getUser, getUsers, getUserVoice, getUserSquad, getUserMessages } = require('./routes/user');
 
