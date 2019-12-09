@@ -93,9 +93,11 @@ const { getRoles } = require('./routes/roles');
 app.get("/v1.0/roles", [middleware, pagination], getRoles);
 
 /* Global Voice Activity */
-const { getVoice } = require('./routes/voice');
+const { getVoice, getVoiceCount, getAverageVoiceTime } = require('./routes/voice');
 
 app.get("/v1.0/voice", [middleware, pagination], getVoice);
+app.get("/v1.0/voice/count", middleware, getVoiceCount);
+app.get("/v1.0/voice/average", middleware, getAverageVoiceTime);
 
 /* Global Squad Activity */
 const { getSquad, getSquadCount } = require('./routes/squad');
@@ -113,8 +115,8 @@ app.get("/v1.0/channels/:id", middleware, getChannelById);
 const { getUser, getUsers, getUserVoice, getUserSquad, getUserMessages, getUserCount, getUserVoiceByChannel } = require('./routes/user');
 
 app.get("/v1.0/users", [middleware, pagination], getUsers);
-app.get("/v1.0/users/:id", middleware, getUser);
 app.get("/v1.0/users/count", middleware, getUserCount);
+app.get("/v1.0/users/:id", middleware, getUser);
 app.get("/v1.0/users/:id/voice", [middleware, pagination], getUserVoice);
 app.get("/v1.0/users/:id/voice/channel/:channelId", [middleware, pagination], getUserVoiceByChannel);
 app.get("/v1.0/users/:id/squad", [middleware, pagination], getUserSquad);

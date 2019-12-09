@@ -9,8 +9,8 @@ const getSquad = (req, res) => {
 };
 
 const getSquadCount = (req, res) => {
-  SquadActivity.count().then(result => {
-    res.status(200).send(result);
+  SquadActivity.count().then(count => {
+    res.status(200).send({ count });
   }).catch(err => {
     res.status(500).send(err);
   });

@@ -24,8 +24,8 @@ const getMessagesByChannel = (req, res) => {
 };
 
 const getMessageCount = (req, res) => {
-  MessageActivity.count().then(result => {
-    res.status(200).send(result);
+  MessageActivity.count().then(count => {
+    res.status(200).send({ count });
   }).catch(err => {
     res.status(500).send(err);
   });
