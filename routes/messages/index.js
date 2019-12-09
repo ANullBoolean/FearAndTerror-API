@@ -18,10 +18,21 @@ const getMessagesByChannel = (req, res) => {
 
   MessageActivity.findAll({ ...req.pagination, where: { channelId } }).then(result => {
     res.status(200).send(result);
+  }).catch(err => {
+    res.status(500).send(err);
+  });
+};
+
+const getMessageCount = (req, res) => {
+  MessageActivity.count().then(result => {
+    res.status(200).send(result);
+  }).catch(err => {
+    res.status(500).send(err);
   });
 };
 
 module.exports = {
   getMessages,
+  getMessageCount,
   getMessagesByChannel,
 };
