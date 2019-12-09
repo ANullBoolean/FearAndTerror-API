@@ -112,6 +112,7 @@ const { getUser, getUsers, getUserVoice, getUserSquad, getUserMessages } = requi
 
 app.get("/v1.0/users", [middleware, pagination], getUsers);
 app.get("/v1.0/users/:id", middleware, getUser);
+app.get("/v1.0/users/count", middleware, getUserCount);
 app.get("/v1.0/users/:id/voice", [middleware, pagination], getUserVoice);
 app.get("/v1.0/users/:id/squad", [middleware, pagination], getUserSquad);
 app.get("/v1.0/users/:id/messages", [middleware, pagination], getUserMessages);
