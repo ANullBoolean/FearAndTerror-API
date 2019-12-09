@@ -4,6 +4,7 @@ const getUserCount = require('./getUserCount');
 const getUserVoice = require('./getUserVoice');
 const getUserSquad = require('./getUserSquad');
 const getUserMessages = require('./getUserMessages');
+const getNewUsersCount = require('./getNewUsersCount');
 const getUserVoiceByChannel = require('./getUserVoiceByChannel');
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
   getUserVoice,
   getUserSquad,
   getUserMessages,
+  getNewUsersCount,
   getUserVoiceByChannel,
 };

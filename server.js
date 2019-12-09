@@ -112,10 +112,11 @@ app.get("/v1.0/channels", [middleware, pagination], getChannels);
 app.get("/v1.0/channels/:id", middleware, getChannelById);
 
 /* Users */
-const { getUser, getUsers, getUserVoice, getUserSquad, getUserMessages, getUserCount, getUserVoiceByChannel } = require('./routes/user');
+const { getUser, getUsers, getUserVoice, getUserSquad, getUserMessages, getUserCount, getNewUsersCount, getUserVoiceByChannel } = require('./routes/user');
 
 app.get("/v1.0/users", [middleware, pagination], getUsers);
 app.get("/v1.0/users/count", middleware, getUserCount);
+app.get("/v1.0/users/new", middleware, getNewUsersCount);
 app.get("/v1.0/users/:id", middleware, getUser);
 app.get("/v1.0/users/:id/voice", [middleware, pagination], getUserVoice);
 app.get("/v1.0/users/:id/voice/channel/:channelId", [middleware, pagination], getUserVoiceByChannel);
