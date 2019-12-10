@@ -81,10 +81,11 @@ app.post('/register', register);
 app.get("/test", middleware, (req, res) => { res.status(200).send({ success: true }); });
 
 /* Message Activity */
-const { getMessages, getMessagesByChannel, getMessageCount } = require('./routes/messages');
+const { getMessages, getMessagesByChannel, getMessageCount, getNewMessagesCount } = require('./routes/messages');
 
 app.get("/v1.0/messages", [middleware, pagination], getMessages);
 app.get("/v1.0/messages/count", middleware, getMessageCount);
+app.get("/v1.0/messages/new", middleware, getNewMessagesCount);
 app.get("/v1.0/messages/:channelId", [middleware, pagination], getMessagesByChannel);
 
 /* Discord Roles */
