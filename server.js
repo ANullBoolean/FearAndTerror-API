@@ -60,7 +60,7 @@ app.use(morgan('dev'));
 ****************/
 
 app.get("/", (req, res) => {
-  res.status(200).send('API Online - Automatic Deploys Working?');
+  res.status(200).send('API Online');
 });
 
 app.get("/api/info", (req, res) => {
