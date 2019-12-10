@@ -34,7 +34,14 @@ const getMessageCount = (req, res) => {
 };
 
 const getNewMessagesCount = (req, res) => {
+  let where = {};
   const days = parseInt(req.query.days || 7);
+  const channelId = req.query.channelId;
+  if (channelId) {
+    where = {
+      channelId,
+    };
+  }
 
   MessageActivity.count({
     group: [ MessageActivity.sequelize.fn('date_trunc', 'day', MessageActivity.sequelize.col('createdAt'))],
@@ -42,6 +49,7 @@ const getNewMessagesCount = (req, res) => {
       createdAt: {
         [Op.gte]: moment().subtract(days, 'days').toDate(),
       },
+      ...where,
     },
   }).then(result => {
     res.status(200).send(result);
