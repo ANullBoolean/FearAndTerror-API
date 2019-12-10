@@ -10,6 +10,8 @@ const getChannels = (req, res) => {
 
 const getChannelById = (req, res) => {
   const channelId = req.params.id;
+  const type = req.query.type || 'text';
+  const access = req.query.access || true;
 
   if (!channelId) {
     return res.status(500).send({
@@ -21,6 +23,8 @@ const getChannelById = (req, res) => {
   Channels.findAll({
     where: {
       channelId,
+      type,
+      access,
     },
   }).then(result => {
     res.status(200).send(result);
