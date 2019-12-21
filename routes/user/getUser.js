@@ -11,12 +11,14 @@ const getUser = (req, res) => {
 
   let where = {
     userId,
+    guild: '398543362476605441',
   };
 
   // Search by steamid
   if (userId.length === 17) {
     where = {
       steamId: userId,
+      guild: '398543362476605441',
     };
   }
 
