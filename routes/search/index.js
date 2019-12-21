@@ -55,7 +55,7 @@ const searchUsers = (req, res) => {
     where,
     ...req.pagination,
   }).then(result => {
-    res.status(200).send(result);
+    res.status(200).send({ ...req.pagination, ...result });
   }).catch(err => {
     res.status(500).send(err);
   });
