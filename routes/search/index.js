@@ -53,6 +53,7 @@ const searchUsers = (req, res) => {
       'updatedAt'
     ],
     where,
+    ...req.pagination,
   }).then(result => {
     res.status(200).send(result);
   }).catch(err => {
