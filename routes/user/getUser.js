@@ -25,7 +25,7 @@ const getUser = (req, res) => {
   User.findAll({
     where,
   }).then(result => {
-    res.status(200).send(result);
+    res.status(200).send(result[0]);
   }).catch(err => {
     res.status(500).send(err);
   });
