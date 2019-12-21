@@ -41,7 +41,7 @@ const searchUsers = (req, res) => {
     };
   }
 
-  User.findAll({
+  User.findAndCountAll({
     attributes: [
       'id',
       'userId',
