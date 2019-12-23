@@ -133,10 +133,13 @@ app.get("/v1.0/users/:id/voice/channel/:channelId", [middleware, pagination], ge
 app.get("/v1.0/users/:id/squad", [middleware, pagination], getUserSquad);
 app.get("/v1.0/users/:id/messages", [middleware, pagination], getUserMessages);
 
-
 const { searchUsers } = require('./routes/search');
-
 app.get("/v1.0/search/users", [middleware, pagination], searchUsers);
+
+const { discordAuthRedirect, discordAuthVerify, discordSession } = require('./routes/discord');
+app.get("/v1.0/discord/redirect", discordAuthRedirect);
+app.get("/v1.0/discord/verify", discordAuthVerify);
+app.get("/v1.0/discord/session", discordSession);
 
 // Start out server :)
 

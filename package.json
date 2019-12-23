@@ -11,6 +11,7 @@
     "build": "rollup server.mjs --file dist/server.js --format cjs"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "body-parser": "1.18.3",
     "cors": "^2.8.4",
     "express": "4.16.3",
@@ -19,8 +20,10 @@
     "moment": "^2.24.0",
     "morgan": "1.9.0",
     "pg": "^7.14.0",
+    "qs": "^6.9.1",
     "sequelize": "^5.21.2",
     "sequelize-pool": "^2.3.0",
+    "uuid": "^3.3.3",
     "winston": "^3.2.1",
     "ws": "^7.2.0"
   }
