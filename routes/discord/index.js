@@ -69,7 +69,6 @@ const discordSession = (req, res) => {
   })
     .then(response => {
       res.status(200).send(response.data);
-      // https://cdn.discordapp.com/avatars/287637021969743872/ef7b0c6b981bdc312e86d0b9003fb243.png
     })
     .catch(error => {
       console.log(error);
