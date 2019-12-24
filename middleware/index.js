@@ -1,5 +1,6 @@
 const { verifyJWTToken } = require('./jwt');
-const { Authentication } = require('../models/Authentication');
+const { User } = require('../models/User');
+const { roles } = require('../routes/authentication');
 
 const middleware = (req, res, next) => {
   if (!req.headers.authorization) {
@@ -21,8 +22,7 @@ const middleware = (req, res, next) => {
       });
     })
     .then((token) => {
-
-      if (!token || !token.data || !token.data.username || !token.exp) {
+      if (!token || !token.data || !token.data.userId || !token.exp) {
         return res.status(401).send({
           status: 'unauthorized',
           statusCode: 401,
@@ -38,10 +38,10 @@ const middleware = (req, res, next) => {
         });
       }
 
-      Authentication.findAll({
+      User.findAll({
         where: {
-          username: token.data.username,
-          active: true,
+          userId: token.data.userId,
+          guild: '398543362476605441',
         },
       }).then(result => {
 
@@ -53,8 +53,17 @@ const middleware = (req, res, next) => {
           });
         }
 
+        if (!JSON.parse(result[0].dataValues.roles).some(r => roles.includes(r))) {
+          return res.status(401).send({
+            status: 'unauthorized',
+            statusCode: 401,
+            message: `Unauthorized User`
+          });
+        }
+
         next();
       }).catch(err => {
+        console.log('ERROR: ', err);
         return res.status(500).send(err);
       });
     });
