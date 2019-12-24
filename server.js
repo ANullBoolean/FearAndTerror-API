@@ -74,7 +74,6 @@ app.get("/api/info", (req, res) => {
 const { login, register } = require('./routes/authentication');
 
 app.post('/login', login);
-app.post('/register', register);
 
 /* AUTHENTICATION REQUIRED */
 
@@ -141,6 +140,10 @@ app.get("/v1.0/discord/redirect", discordAuthRedirect);
 app.get("/v1.0/discord/verify", discordAuthVerify);
 app.get("/v1.0/discord/session", discordSession);
 app.post("/v1.0/discord/login", discordAuthLogin);
+
+const { submitApplication, getApplications } = require('./routes/applications');
+app.post("/v1.0/application/submit", submitApplication);
+app.get("/v1.0/applications", [middleware, pagination], getApplications);
 
 // Start out server :)
 
