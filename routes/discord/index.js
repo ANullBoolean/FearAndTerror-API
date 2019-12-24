@@ -60,7 +60,7 @@ const discordAuthLogin = (req, res) => {
     client_id: config.clientid,
     client_secret: config.clientsecret,
     code,
-    redirect_uri: `http://localhost:4200/login`,
+    redirect_uri: `http://personnel.squadhosting.com/login`,
     grant_type: 'authorization_code',
     scope: 'identify'
   }), {
