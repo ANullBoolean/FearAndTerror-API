@@ -27,7 +27,7 @@ const createJWToken = details => {
 
   if (!details.maxAge || typeof details.maxAge !== 'number')
   {
-    details.maxAge = 3600 * 2;
+    details.maxAge = 3600 * 12;
   }
 
   details.sessionData = _.reduce(details.sessionData || {}, (memo, val, key) =>
