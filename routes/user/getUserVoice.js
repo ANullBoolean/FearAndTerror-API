@@ -10,8 +10,8 @@ const getUserVoice = (req, res) => {
     });
   }
 
-  VoiceActivity.findAll({ ...req.pagination, where: { userId } }).then(result => {
-    res.status(200).send(result);
+  VoiceActivity.findAndCountAll({ ...req.pagination, where: { userId } }).then(result => {
+    res.status(200).send({ ...req.pagination, ...result });
   }).catch(err => {
     res.status(500).send(err);
   });
