@@ -120,6 +120,9 @@ const {
   getUserMessages,
   getUserCount,
   getNewUsersCount,
+  getUserVoiceDaily,
+  getUserVoiceAverage,
+  getUserMessagesByDay,
   getUserVoiceByChannel,
 } = require('./routes/user');
 
@@ -128,9 +131,12 @@ app.get("/v1.0/users/count", middleware, getUserCount);
 app.get("/v1.0/users/new", middleware, getNewUsersCount);
 app.get("/v1.0/users/:id", middleware, getUser);
 app.get("/v1.0/users/:id/voice", [middleware, pagination], getUserVoice);
+app.get("/v1.0/users/:id/voice/average", middleware, getUserVoiceAverage);
+app.get("/v1.0/users/:id/voice/daily", middleware, getUserVoiceDaily);
 app.get("/v1.0/users/:id/voice/channel/:channelId", [middleware, pagination], getUserVoiceByChannel);
 app.get("/v1.0/users/:id/squad", [middleware, pagination], getUserSquad);
 app.get("/v1.0/users/:id/messages", [middleware, pagination], getUserMessages);
+app.get("/v1.0/users/:id/messages/daily", middleware, getUserMessagesByDay);
 
 const { searchUsers } = require('./routes/search');
 app.get("/v1.0/search/users", [middleware, pagination], searchUsers);
