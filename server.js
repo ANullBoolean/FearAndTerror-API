@@ -147,9 +147,11 @@ app.get("/v1.0/discord/verify", discordAuthVerify);
 app.get("/v1.0/discord/session", discordSession);
 app.post("/v1.0/discord/login", discordAuthLogin);
 
-const { submitApplication, getApplications } = require('./routes/applications');
+const { submitApplication, getApplications, getApplication, voteApplication } = require('./routes/applications');
 app.post("/v1.0/application/submit", submitApplication);
 app.get("/v1.0/applications", [middleware, pagination], getApplications);
+app.get("/v1.0/applications/:id", middleware, getApplication);
+app.post("/v1.0/applications/:id/vote", middleware, voteApplication);
 
 // Start out server :)
 

@@ -79,7 +79,83 @@ const getApplications = (req, res) => {
     });
 }
 
+const getApplication = (req, res) => {
+  const id = req.params.id;
+  if (isNaN(id)) {
+    return res.status(500).send({
+      error: true,
+      message: 'Invalid ID',
+    });
+  }
+
+  Applications.findOne({
+    where: {
+      id,
+    },
+  })
+    .then(result => {
+      res.status(200).send(result);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send({
+        error: true,
+      });
+    });
+}
+
+const voteApplication = (req, res) => {
+  const id = req.params.id;
+  const upvote = req.body.upvote == true ? true : false;
+
+  if (isNaN(id)) {
+    return res.status(500).send({
+      error: true,
+      message: 'Invalid ID',
+    });
+  }
+
+  Applications.findOne({
+    where: {
+      id,
+    },
+  })
+    .then(application => {
+      const userId = req.user.userId;
+      const votes = {
+        ...application.get('votes'),
+        [userId]: upvote,
+      };
+
+      const upvotes = Object.values(votes).filter(v => v == true).length;
+      const downvotes = Object.keys(votes).length - upvotes;
+
+      application.update({
+        votes,
+        upvotes,
+        downvotes,
+      })
+        .then(result => {
+          res.status(200).send(result);
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).send({
+            error: true,
+          });
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send({
+        error: true,
+      });
+    });
+}
+
 module.exports = {
   submitApplication,
+  voteApplication,
   getApplications,
+  getApplication,
 };

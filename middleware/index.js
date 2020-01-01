@@ -61,6 +61,8 @@ const middleware = (req, res, next) => {
           });
         }
 
+        req.user = result[0];
+
         next();
       }).catch(err => {
         console.log('ERROR: ', err);

@@ -10,7 +10,7 @@ const { roles } = require('../authentication');
 const sessions = {};
 
 const discordAuthRedirect = (req, res) => {
-  res.redirect('https://discordapp.com/api/oauth2/authorize?client_id=651122365006086144&redirect_uri=http%3A%2F%2Fapi.personnel.squadhosting.com%2Fv1.0%2Fdiscord%2Fverify&response_type=code&scope=identify');
+  res.redirect('https://discordapp.com/api/oauth2/authorize?client_id=651122365006086144&redirect_uri=http%3A%2F%2Fapi.fearandterror.com%2Fv1.0%2Fdiscord%2Fverify&response_type=code&scope=identify');
 };
 
 const discordAuthVerify = (req, res) => {
@@ -27,7 +27,7 @@ const discordAuthVerify = (req, res) => {
     client_id: config.clientid,
     client_secret: config.clientsecret,
     code,
-    redirect_uri: `http://api.personnel.squadhosting.com/v1.0/discord/verify`,
+    redirect_uri: `http://api.fearandterror.com/v1.0/discord/verify`,
     grant_type: 'authorization_code',
     scope: 'identify'
   }), {
@@ -38,7 +38,7 @@ const discordAuthVerify = (req, res) => {
     .then(response => {
       const uuid = uuidv4();
       sessions[uuid] = response.data;
-      res.redirect(`http://personnel.squadhosting.com/application?uuid=${uuid}`);
+      res.redirect(`http://personnel.fearandterror.com/application?uuid=${uuid}`);
     })
     .catch(error => {
       console.log(error);
@@ -60,7 +60,7 @@ const discordAuthLogin = (req, res) => {
     client_id: config.clientid,
     client_secret: config.clientsecret,
     code,
-    redirect_uri: `http://personnel.squadhosting.com/login`,
+    redirect_uri: `http://personnel.fearandterror.com/login`,
     grant_type: 'authorization_code',
     scope: 'identify'
   }), {
