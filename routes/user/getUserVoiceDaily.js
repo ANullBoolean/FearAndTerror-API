@@ -29,7 +29,31 @@ const getUserVoiceDaily = (req, res) => {
       ...where,
     },
   }).then(result => {
-    res.status(200).send(result);
+    const results = [];
+
+    for (let index = 0; index < days; index++) {
+      const day = moment().subtract(index, 'days').startOf('day').format('YYYY-MM-DD');
+      let found = false;
+
+      result.forEach(d => {
+        if (d.get('date') === day) {
+          results.push({
+            date: d.get('date'),
+            time: d.get('time'),
+          });
+          found = true;
+        }
+      });
+
+      if (!found) {
+        results.push({
+          date: day,
+          time: 0,
+        });
+      }
+    }
+
+    res.status(200).send(results);
   }).catch(err => {
     res.status(500).send({
       error: true,

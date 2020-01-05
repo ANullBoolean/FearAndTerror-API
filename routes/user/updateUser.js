@@ -3,16 +3,23 @@ const { User } = require('../../models/User');
 const updateUser = (req, res) => {
   const id = req.params.id;
 
+  if (!req.user.dataValues.roles.includes('410574082267021312')) {
+    res.status(500).send({
+      error: true,
+      message: 'You\'re not personnel',
+    });
+  }
+
   const { steamId, ...garbage } = req.body;
 
   // Currently we're only allowed to update steamId
 
-  // if (!id || !steamId) {
-  //   return res.status(500).send({
-  //     status: 500,
-  //     error: 'No id provided',
-  //   });
-  // }
+  if (!id || !steamId) {
+    return res.status(500).send({
+      status: 500,
+      error: 'No id provided',
+    });
+  }
 
   User.update({
     steamId,
