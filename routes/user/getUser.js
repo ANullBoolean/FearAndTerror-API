@@ -31,7 +31,7 @@ const getUser = (req, res) => {
         message: 'user not found',
       });
     }
-    console.log(result);
+    console.log(JSON.stringify(result));
     res.status(200).send(result[0]);
   }).catch(err => {
     res.status(500).send(err);
