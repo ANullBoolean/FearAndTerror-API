@@ -159,6 +159,7 @@ const voteApplication = (req, res) => {
     },
   })
     .then(application => {
+      let statusChange = {};
       const userId = req.user.userId;
       const votes = {
         ...application.get('votes'),
@@ -168,10 +169,18 @@ const voteApplication = (req, res) => {
       const upvotes = Object.values(votes).filter(v => v == true).length;
       const downvotes = Object.keys(votes).length - upvotes;
 
+      // Automatically push it into review if we meet these values
+      if (upvotes >= 10 || downvotes >= 5) {
+        statusChange = {
+          status: 'vote-review',
+        };
+      }
+
       application.update({
         votes,
         upvotes,
         downvotes,
+        ...statusChange,
       })
         .then(result => {
           res.status(200).send(result);
