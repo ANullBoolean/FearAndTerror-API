@@ -15,7 +15,7 @@ const getUser = (req, res) => {
   };
 
   // Search by steamid
-  if (userId.length === 17) {
+  if (userId.length === 17 && userId.includes('765')) {
     where = {
       steamId: userId,
       guild: '398543362476605441',
@@ -25,6 +25,13 @@ const getUser = (req, res) => {
   User.findAll({
     where,
   }).then(result => {
+    if (result.length < 1) {
+      res.status(404).send({
+        error: true,
+        message: 'user not found',
+      });
+    }
+    console.log(result);
     res.status(200).send(result[0]);
   }).catch(err => {
     res.status(500).send(err);
