@@ -11,7 +11,8 @@ const User = Database.db.define('user', {
 		type: Sequelize.ENUM,
 		values: [ '','pending','recruit','member','leader','moderator','administrator','asst-manager','manager','director' ],
 	},
-	roles: Sequelize.TEXT,
+  roles: Sequelize.TEXT,
+  avatar: Sequelize.STRING,
 }, {
 	indexes: [
 		{ fields: ['userId','guild'] },
