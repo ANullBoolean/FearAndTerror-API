@@ -124,12 +124,14 @@ const {
   getUserVoiceAverage,
   getUserMessagesByDay,
   getUserVoiceByChannel,
+  updateUser,
 } = require('./routes/user');
 
 app.get("/v1.0/users", [middleware, pagination], getUsers);
 app.get("/v1.0/users/count", middleware, getUserCount);
 app.get("/v1.0/users/new", middleware, getNewUsersCount);
 app.get("/v1.0/users/:id", middleware, getUser);
+app.post("/v1.0/users/:id", middleware, updateUser);
 app.get("/v1.0/users/:id/voice", [middleware, pagination], getUserVoice);
 app.get("/v1.0/users/:id/voice/average", middleware, getUserVoiceAverage);
 app.get("/v1.0/users/:id/voice/daily", middleware, getUserVoiceDaily);
@@ -147,11 +149,13 @@ app.get("/v1.0/discord/verify", discordAuthVerify);
 app.get("/v1.0/discord/session", discordSession);
 app.post("/v1.0/discord/login", discordAuthLogin);
 
-const { submitApplication, getApplications, getApplication, voteApplication } = require('./routes/applications');
+const { submitApplication, getApplications, getApplication, voteApplication, getUserApplications, updateApplication } = require('./routes/applications');
 app.post("/v1.0/application/submit", submitApplication);
 app.get("/v1.0/applications", [middleware, pagination], getApplications);
-app.get("/v1.0/applications/:id", middleware, getApplication);
+app.get("/v1.0/applications/:id", [ middleware, pagination], getUserApplications);
+app.get("/v1.0/application/:id", middleware, getApplication);
 app.post("/v1.0/applications/:id/vote", middleware, voteApplication);
+app.post("/v1.0/applications/:id", middleware, updateApplication);
 
 // Start out server :)
 

@@ -9,6 +9,7 @@ const getUserVoiceDaily = require('./getUserVoiceDaily');
 const getUserVoiceAverage = require('./getUserVoiceAverage');
 const getUserMessagesByDay = require('./getUserMessagesByDay');
 const getUserVoiceByChannel = require('./getUserVoiceByChannel');
+const updateUser = require('./updateUser');
 
 module.exports = {
   getUser,
@@ -22,4 +23,5 @@ module.exports = {
   getUserVoiceAverage,
   getUserMessagesByDay,
   getUserVoiceByChannel,
+  updateUser,
 };
