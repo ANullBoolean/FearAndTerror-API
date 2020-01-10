@@ -16,7 +16,7 @@ const getWhitelist = (req, res) => {
   })
   .then(result => {
     result.forEach(user => {
-      whitelist = `${whitelist}${user.steamId} // ${user.nickname} (${user.username})` + '\n';
+      whitelist = `${whitelist}Admin=${user.steamId}:Whitelist // ${user.nickname} (${user.username})` + '\n';
     });
     res.status(200).send(whitelist);
   })
