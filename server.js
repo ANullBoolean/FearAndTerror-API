@@ -157,6 +157,9 @@ app.get("/v1.0/application/:id", middleware, getApplication);
 app.post("/v1.0/applications/:id/vote", middleware, voteApplication);
 app.post("/v1.0/applications/:id", middleware, updateApplication);
 
+const { getWhitelist } = require('./routes/whitelist');
+app.get("/v1.0/post/whitelist", getWhitelist);
+
 // Start out server :)
 
 app.listen(APIPort, () => {
