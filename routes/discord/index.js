@@ -77,7 +77,6 @@ const discordAuthLogin = (req, res) => {
       })
         .then(response => {
 
-
           User.findAll({
             where: {
               userId: response.data.id,

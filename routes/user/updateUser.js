@@ -8,12 +8,12 @@ const updateUser = (req, res) => {
       error: true,
       message: 'You\'re not personnel',
     });
+    return;
   }
 
   const { steamId, military, tz, joindate, ...garbage } = req.body;
 
   // Currently we're only allowed to update steamId
-
   if (!id) {
     return res.status(500).send({
       status: 500,
@@ -36,7 +36,7 @@ const updateUser = (req, res) => {
       success: true,
     });
   }).catch(err => {
-    console.log(err);
+    // console.log(err);
     res.status(500).send(err);
   });
 };
