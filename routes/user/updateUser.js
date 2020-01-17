@@ -10,11 +10,11 @@ const updateUser = (req, res) => {
     });
   }
 
-  const { steamId, ...garbage } = req.body;
+  const { steamId, military, tz, joindate, ...garbage } = req.body;
 
   // Currently we're only allowed to update steamId
 
-  if (!id || !steamId) {
+  if (!id) {
     return res.status(500).send({
       status: 500,
       error: 'No id provided',
@@ -23,6 +23,9 @@ const updateUser = (req, res) => {
 
   User.update({
     steamId,
+    military,
+    tz,
+    joindate,
   }, {
     where: {
       id,
