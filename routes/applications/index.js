@@ -31,27 +31,22 @@ const submitApplication = (req, res) => {
     notes: {},
   })
     .then(result => {
-      console.log('HERE: ', result.dataValues);
-      // axios.get(`http://206.189.230.161:4500/applicant/channel-signup`, {
-      //   params: {
-      //     uid: req.query.uid,
-      //     id: result,
-      //   }
-      // })
-      //   .then(result => {
-      //     res.status(200).send({
-      //       complete: true,
-      //     });
-      //   })
-      //   .catch(err => {
-      //     res.status(500).send({
-      //       complete: false,
-      //     });
-      //   });
-
-      res.status(200).send({
-        success: true,
-      });
+      axios.get(`http://206.189.230.161:4500/application`, {
+        params: {
+          uid: userId,
+          id: result.dataValues.id,
+        }
+      })
+        .then(() => {
+          res.status(200).send({
+            complete: true,
+          });
+        })
+        .catch(err => {
+          res.status(500).send({
+            complete: false,
+          });
+        });
     })
     .catch(err => {
       console.log(err);
