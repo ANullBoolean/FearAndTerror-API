@@ -9,6 +9,7 @@ const roles = [
   '398544596755415062', // Manager
   '650889847715790866', // Executive Producer
   '410574082267021312', // FaT-Personnel
+  '491656150073475082', // FaT-Ambassadors
 ];
 
 module.exports = {
