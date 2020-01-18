@@ -14,13 +14,6 @@ const middleware = (req, res, next) => {
   const authToken = req.headers.authorization.replace('Bearer ', '');
 
   verifyJWTToken(authToken)
-    .catch(() => {
-      return res.status(401).send({
-        status: 'unauthorized',
-        statusCode: 401,
-        message: `Invalid Authentication Token`
-      });
-    })
     .then((token) => {
       if (!token || !token.data || !token.data.userId || !token.exp) {
         return res.status(401).send({
@@ -67,6 +60,13 @@ const middleware = (req, res, next) => {
       }).catch(err => {
         console.log('ERROR: ', err);
         return res.status(500).send(err);
+      });
+    })
+    .catch(() => {
+      return res.status(401).send({
+        status: 'unauthorized',
+        statusCode: 401,
+        message: `Invalid Authentication Token`
       });
     });
 }

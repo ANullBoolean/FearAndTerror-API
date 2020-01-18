@@ -284,6 +284,25 @@ const giveTags = (req, res) => {
     });
 }
 
+const promoteApplicant = (req, res) => {
+  axios.get(`http://206.189.230.161:4500/applicant/accepted`, {
+    params: {
+      uid: req.query.userId,
+    }
+  })
+    .then(() => {
+      res.status(200).send({
+        complete: true,
+      });
+    })
+    .catch(err => {
+      // console.log(err);
+      res.status(500).send({
+        complete: false,
+      });
+    });
+}
+
 const completeApplication = (req, res) => {
   const id = req.params.id;
 
@@ -296,14 +315,6 @@ const completeApplication = (req, res) => {
     tz,
     joindate,
   } = req.body;
-
-  axios.get(`http://206.189.230.161:4500/applicant/accepted`, {
-    params: {
-      uid: userId,
-    }
-  }).catch(err => {
-    // console.log(err);
-  });
 
   if (isNaN(id)) {
     return res.status(500).send({
@@ -354,4 +365,5 @@ module.exports = {
   updateApplication,
   giveTags,
   completeApplication,
+  promoteApplicant,
 };
