@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { Applications } = require('../../models/Applications');
+const { User } = require('../../models/User');
 
 const submitApplication = (req, res) => {
 
@@ -29,7 +30,25 @@ const submitApplication = (req, res) => {
     downvotes: 0,
     notes: {},
   })
-    .then(() => {
+    .then(result => {
+      console.log('HERE: ', result);
+      // axios.get(`http://206.189.230.161:4500/applicant/channel-signup`, {
+      //   params: {
+      //     uid: req.query.uid,
+      //     id: result,
+      //   }
+      // })
+      //   .then(result => {
+      //     res.status(200).send({
+      //       complete: true,
+      //     });
+      //   })
+      //   .catch(err => {
+      //     res.status(500).send({
+      //       complete: false,
+      //     });
+      //   });
+
       res.status(200).send({
         success: true,
       });
@@ -210,17 +229,11 @@ const updateApplication = (req, res) => {
 
     axios.get(`http://206.189.230.161:4500/applicant/welcome`, {
       params: {
-        uid: req.params.uid,
+        uid: req.body.uid,
       }
-    })
-      .then(response => {
-        res.status(200).send(response.data.response);
-      })
-      .catch(error => {
-        res.status(500).send({
-          error: 'Something went wrong...',
-        });
-      });
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   if (isNaN(id)) {
@@ -248,6 +261,85 @@ const updateApplication = (req, res) => {
     });
 }
 
+const giveTags = (req, res) => {
+  axios.get(`http://206.189.230.161:4500/applicant/channel-signup`, {
+    params: {
+      uid: req.query.uid,
+    }
+  })
+    .then(result => {
+      res.status(200).send({
+        complete: true,
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        complete: false,
+      });
+    });
+}
+
+const completeApplication = (req, res) => {
+  const id = req.params.id;
+
+  const {
+    uid,
+    userId,
+    status,
+    steamId,
+    military,
+    tz,
+    joindate,
+  } = req.body;
+
+  axios.get(`http://206.189.230.161:4500/applicant/accepted`, {
+    params: {
+      uid: userId,
+    }
+  }).catch(err => {
+    // console.log(err);
+  });
+
+  if (isNaN(id)) {
+    return res.status(500).send({
+      error: true,
+      message: 'Invalid ID',
+    });
+  }
+
+  Applications.update({
+    status,
+  }, {
+    where: {
+      id,
+    },
+  })
+    .then(result => {
+      User.update({
+        steamId,
+        military,
+        tz,
+        joindate,
+      }, {
+        where: {
+          id: uid,
+          guild: '398543362476605441',
+        },
+      }).then(result => {
+        res.status(200).send({
+          success: true,
+        });
+      }).catch(err => {
+        res.status(500).send(err);
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        error: true,
+      });
+    });
+}
+
 module.exports = {
   submitApplication,
   voteApplication,
@@ -255,4 +347,6 @@ module.exports = {
   getApplication,
   getUserApplications,
   updateApplication,
+  giveTags,
+  completeApplication,
 };

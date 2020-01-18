@@ -142,13 +142,24 @@ app.get("/v1.0/discord/verify", discordAuthVerify);
 app.get("/v1.0/discord/session", discordSession);
 app.post("/v1.0/discord/login", discordAuthLogin);
 
-const { submitApplication, getApplications, getApplication, voteApplication, getUserApplications, updateApplication } = require('./routes/applications');
+const {
+  submitApplication,
+  getApplications,
+  getApplication,
+  voteApplication,
+  getUserApplications,
+  updateApplication,
+  giveTags,
+  completeApplication,
+} = require('./routes/applications');
 app.post("/v1.0/application/submit", submitApplication);
+app.get("/v1.0/applications/giveTags", middleware, giveTags);
 app.get("/v1.0/applications", [middleware, pagination], getApplications);
 app.get("/v1.0/applications/:id", [ middleware, pagination], getUserApplications);
 app.get("/v1.0/application/:id", middleware, getApplication);
 app.post("/v1.0/applications/:id/vote", middleware, voteApplication);
 app.post("/v1.0/applications/:id", middleware, updateApplication);
+app.post("/v1.0/applications/:id/complete", middleware, completeApplication);
 
 const { getWhitelist } = require('./routes/whitelist');
 app.get("/v1.0/post/whitelist", getWhitelist);
