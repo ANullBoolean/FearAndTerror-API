@@ -31,7 +31,7 @@ const submitApplication = (req, res) => {
     notes: {},
   })
     .then(result => {
-      console.log('HERE: ', result);
+      console.log('HERE: ', result.applications.dataValues);
       // axios.get(`http://206.189.230.161:4500/applicant/channel-signup`, {
       //   params: {
       //     uid: req.query.uid,
