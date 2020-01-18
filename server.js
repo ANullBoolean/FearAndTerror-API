@@ -4,12 +4,18 @@ const morgan = require('morgan');
 const fs = require('fs');
 const cors = require('cors');
 const winston = require('winston');
+const io = require('@pm2/io');
 
 const config = JSON.parse(fs.readFileSync('config.json'));
 
 const { middleware, pagination } = require('./middleware');
 const { Database } = require('./structures/PostgreSQL');
-// const { User } = require('./models/User.js');
+
+const httpMeter = io.meter({
+  name      : 'req/min',
+  samples   : 1,
+  timeframe : 60,
+});
 
 /****************
 **   Config    **
@@ -33,6 +39,7 @@ const app = express();
 
 app.use(function(req, res, next) {
   const startHrTime = process.hrtime();
+  httpMeter.mark();
 
   res.on("finish", () => {
     const elapsedHrTime = process.hrtime(startHrTime);

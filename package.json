@@ -11,6 +11,7 @@
     "build": "rollup server.mjs --file dist/server.js --format cjs"
   },
   "dependencies": {
+    "@pm2/io": "^4.3.3",
     "axios": "^0.19.0",
     "body-parser": "1.18.3",
     "cors": "^2.8.4",
