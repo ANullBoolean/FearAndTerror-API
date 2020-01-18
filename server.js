@@ -70,14 +70,7 @@ app.get("/api/info", (req, res) => {
   });
 });
 
-/* NO AUTHENTICATION REQUIRED */
-const { login, register } = require('./routes/authentication');
-
-app.post('/login', login);
-
 /* AUTHENTICATION REQUIRED */
-
-app.get("/test", middleware, (req, res) => { res.status(200).send({ success: true }); });
 
 /* Message Activity */
 const { getMessages, getMessagesByChannel, getMessageCount, getNewMessagesCount } = require('./routes/messages');

@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const { User } = require('./User');
 const { Database } = require('../structures/PostgreSQL');
 
 const Applications = Database.db.define('applications', {

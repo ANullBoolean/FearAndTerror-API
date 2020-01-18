@@ -23,7 +23,7 @@ const getSteamUserBans = (req, res) => {
     }
   })
     .then(response => {
-      res.status(200).send(response.data.response);
+      res.status(200).send(response.data);
     })
     .catch(error => {
       res.status(500).send({

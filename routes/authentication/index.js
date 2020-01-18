@@ -1,7 +1,3 @@
-const crypto = require('crypto');
-const { createJWToken } = require('../../middleware/jwt.js');
-const { Authentication } = require('../../models/Authentication');
-
 const roles = [
   '601467946858184704', // Clan Leader
   '458087769303023617', // Clan Director
@@ -15,53 +11,6 @@ const roles = [
   '410574082267021312', // FaT-Personnel
 ];
 
-const hashPassword = password => {
-  return crypto.createHash('sha256').update(password).digest('hex');
-}
-
-const login = (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password || username === 'Paul') {
-    return res.status(500).send({
-      status: 'error',
-      statusCode: 500,
-      message: 'All Fields Required'
-    });
-  }
-
-  Authentication.findAll({
-    where: {
-      username,
-      password: hashPassword(password),
-      active: true,
-    },
-  }).then(results => {
-
-    if (results.length < 1) {
-      return res.status(401).send({
-        status: 'unauthorized',
-        statusCode: 401,
-        message: `Invalid Username or Password`
-      });
-    }
-
-    // Authenticated Successfully, send token
-    res.status(200).send({
-      status: 'success',
-      statusCode: 200,
-      data: {
-        token: createJWToken({ sessionData: { username }}),
-      }
-    });
-  }).catch(err => {
-    res.status(500).send(err);
-  });
-
-}
-
 module.exports = {
-  hashPassword,
-  login,
   roles,
 };

@@ -1,3 +1,4 @@
+const axios = require('axios');
 const { Applications } = require('../../models/Applications');
 
 const submitApplication = (req, res) => {
@@ -203,6 +204,24 @@ const voteApplication = (req, res) => {
 const updateApplication = (req, res) => {
   const id = req.params.id;
   const status = req.body.status;
+
+  if (status === 'pending-interview') {
+    // /applicant/welcome
+
+    axios.get(`http://206.189.230.161:4500/applicant/welcome`, {
+      params: {
+        uid: req.params.uid,
+      }
+    })
+      .then(response => {
+        res.status(200).send(response.data.response);
+      })
+      .catch(error => {
+        res.status(500).send({
+          error: 'Something went wrong...',
+        });
+      });
+  }
 
   if (isNaN(id)) {
     return res.status(500).send({
