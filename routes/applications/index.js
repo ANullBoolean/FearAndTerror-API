@@ -231,6 +231,16 @@ const updateApplication = (req, res) => {
     });
   }
 
+  if (status === 'denied') {
+    axios.get(`http://206.189.230.161:4500/applicant/denied`, {
+      params: {
+        uid: req.body.uid,
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
   if (isNaN(id)) {
     return res.status(500).send({
       error: true,
