@@ -171,7 +171,7 @@ app.post("/v1.0/applications/:id", middleware, updateApplication);
 app.post("/v1.0/applications/:id/complete", middleware, completeApplication);
 
 const { getWhitelist } = require('./routes/whitelist');
-app.get("/v1.0/post/whitelist", getWhitelist);
+app.get("/v1.0/whitelist", getWhitelist);
 
 const { getSteamUsers, getSteamUserBans } = require('./routes/steam');
 app.get("/v1.0/steam/getUsers", middleware, getSteamUsers);

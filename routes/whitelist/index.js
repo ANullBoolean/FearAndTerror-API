@@ -3,7 +3,7 @@ const { User } = require('../../models/User');
 
 const getWhitelist = (req, res) => {
 
-  let whitelist = '\n\nGroup=Whitelist:reserve\n\n';
+  let whitelist = '\n\nGroup=Member:reserve\n\n';
 
   res.set({ 'content-type': 'text/plain; charset=utf-8' });
 
@@ -19,7 +19,7 @@ const getWhitelist = (req, res) => {
     whitelist = `Loaded ${result.count} Members for whitelist${whitelist}`
 
     result.rows.forEach(user => {
-      whitelist = `${whitelist}Admin=${user.steamId}:Whitelist // ${user.nickname} (${user.username})` + '\n';
+      whitelist = `${whitelist}Admin=${user.steamId}:Member // ${user.nickname} (${user.username})` + '\n';
     });
     res.status(200).send(whitelist);
   })
