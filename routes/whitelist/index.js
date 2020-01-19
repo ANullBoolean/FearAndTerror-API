@@ -16,7 +16,7 @@ const getWhitelist = (req, res) => {
   })
   .then(result => {
 
-    whitelist = `Loaded ${result.count} Members for whitelist${whitelist}`
+    whitelist = `// Loaded ${result.count} Members for whitelist${whitelist}`
 
     result.rows.forEach(user => {
       whitelist = `${whitelist}Admin=${user.steamId}:Member // ${user.nickname} (${user.username})` + '\n';
