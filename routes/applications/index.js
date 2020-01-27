@@ -316,6 +316,8 @@ const completeApplication = (req, res) => {
     joindate,
   } = req.body;
 
+  console.log(req.user.userId);
+
   if (isNaN(id)) {
     return res.status(500).send({
       error: true,
@@ -336,6 +338,7 @@ const completeApplication = (req, res) => {
         military,
         tz,
         joindate,
+        ambassador: req.user.userId,
       }, {
         where: {
           id: uid,

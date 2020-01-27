@@ -11,9 +11,8 @@ const updateUser = (req, res) => {
     return;
   }
 
-  const { steamId, military, tz, joindate, ...garbage } = req.body;
+  const { steamId, military, tz, joindate, ambassador, ...garbage } = req.body;
 
-  // Currently we're only allowed to update steamId
   if (!id) {
     return res.status(500).send({
       status: 500,
@@ -26,6 +25,7 @@ const updateUser = (req, res) => {
     military,
     tz,
     joindate,
+    ambassador,
   }, {
     where: {
       id,
