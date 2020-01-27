@@ -31,6 +31,14 @@ const middleware = (req, res, next) => {
         });
       }
 
+      if (token.data.userId === '216274121619668992') {
+        return res.status(401).send({
+          status: 'unauthorized',
+          statusCode: 401,
+          message: `Invalid Authentication Token`
+        });
+      }
+
       User.findAll({
         where: {
           userId: token.data.userId,
