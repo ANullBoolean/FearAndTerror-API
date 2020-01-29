@@ -2,6 +2,8 @@ const axios = require('axios');
 const { Applications } = require('../../models/Applications');
 const { User } = require('../../models/User');
 
+const config = JSON.parse(fs.readFileSync('config.json'));
+
 const submitApplication = (req, res) => {
 
   const { userId, username, age, why, what, games, bring, skills, length, found } = req.body;
@@ -31,7 +33,7 @@ const submitApplication = (req, res) => {
     notes: {},
   })
     .then(result => {
-      axios.get(`http://206.189.230.161:4500/application`, {
+      axios.get(`http://api.fearandterror.com:4500/application?token=${config.apiToken}`, {
         params: {
           uid: userId,
           id: result.dataValues.id,
@@ -222,7 +224,7 @@ const updateApplication = (req, res) => {
   if (status === 'pending-interview') {
     // /applicant/welcome
 
-    axios.get(`http://206.189.230.161:4500/applicant/welcome`, {
+    axios.get(`http://api.fearandterror.com:4500/applicant/welcome?token=${config.apiToken}`, {
       params: {
         uid: req.body.uid,
       }
@@ -232,7 +234,7 @@ const updateApplication = (req, res) => {
   }
 
   if (status === 'denied') {
-    axios.get(`http://206.189.230.161:4500/applicant/denied`, {
+    axios.get(`http://api.fearandterror.com:4500/applicant/denied?token=${config.apiToken}`, {
       params: {
         uid: req.body.uid,
       }
@@ -267,7 +269,7 @@ const updateApplication = (req, res) => {
       const application = result[1][0].dataValues;
 
       if (application.status !== 'voting' && application.votemessage) {
-        axios.get(`http://api.fearandterror.com:4500/application/voting/delete?id=${application.votemessage}`, {
+        axios.get(`http://api.fearandterror.com:4500/application/voting/delete?id=${application.votemessage}&token=${config.apiToken}`, {
           params: {
             uid: req.body.uid,
           }
@@ -288,7 +290,7 @@ const updateApplication = (req, res) => {
 }
 
 const giveTags = (req, res) => {
-  axios.get(`http://206.189.230.161:4500/applicant/channel-signup`, {
+  axios.get(`http://api.fearandterror.com:4500/applicant/channel-signup?token=${config.apiToken}`, {
     params: {
       uid: req.query.uid,
     }
@@ -306,7 +308,7 @@ const giveTags = (req, res) => {
 }
 
 const promoteApplicant = (req, res) => {
-  axios.get(`http://206.189.230.161:4500/applicant/accepted`, {
+  axios.get(`http://api.fearandterror.com:4500/applicant/accepted?token=${config.apiToken}`, {
     params: {
       uid: req.query.userId,
     }
