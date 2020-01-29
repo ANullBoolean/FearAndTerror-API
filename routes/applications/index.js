@@ -2,6 +2,7 @@ const axios = require('axios');
 const { Applications } = require('../../models/Applications');
 const { User } = require('../../models/User');
 
+const fs = require('fs');
 const config = JSON.parse(fs.readFileSync('config.json'));
 
 const submitApplication = (req, res) => {
