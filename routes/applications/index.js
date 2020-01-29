@@ -254,9 +254,30 @@ const updateApplication = (req, res) => {
     where: {
       id,
     },
+    returning: true,
   })
     .then(result => {
-      res.status(200).send(result);
+      if (result[0] !== 1) {
+        return res.status(200).send({
+          error: true,
+          message: 'Missing Update Data',
+        });
+      }
+
+      const application = result[1][0].dataValues;
+
+      if (application.status !== 'voting' && application.votemessage) {
+        axios.get(`http://api.fearandterror.com:4500/application/voting/delete?id=${application.votemessage}`, {
+          params: {
+            uid: req.body.uid,
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      }
+
+      res.status(200).send(application);
     })
     .catch(err => {
       console.log(err);
@@ -315,8 +336,6 @@ const completeApplication = (req, res) => {
     tz,
     joindate,
   } = req.body;
-
-  console.log(req.user.userId);
 
   if (isNaN(id)) {
     return res.status(500).send({
