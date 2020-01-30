@@ -160,9 +160,11 @@ const {
   giveTags,
   completeApplication,
   promoteApplicant,
+  processVotingApplications,
 } = require('./routes/applications');
 app.post("/v1.0/application/submit", submitApplication);
 app.get("/v1.0/applications/giveTags", middleware, giveTags);
+app.get("/v1.0/applications/process", processVotingApplications);
 app.get("/v1.0/application/promote", middleware, promoteApplicant);
 app.get("/v1.0/applications", [middleware, pagination], getApplications);
 app.get("/v1.0/applications/:id", [ middleware, pagination], getUserApplications);

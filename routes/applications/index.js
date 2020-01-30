@@ -1,6 +1,8 @@
 const axios = require('axios');
 const { Applications } = require('../../models/Applications');
 const { User } = require('../../models/User');
+const { Op } = require('sequelize');
+const moment = require('moment');
 
 const fs = require('fs');
 const config = JSON.parse(fs.readFileSync('config.json'));
@@ -153,6 +155,36 @@ const getApplication = (req, res) => {
   })
     .then(result => {
       res.status(200).send(result);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send({
+        error: true,
+      });
+    });
+}
+
+
+const processVotingApplications = (req, res) => {
+  Applications.findAll({
+    where: {
+      status: 'voting',
+      createdAt: {
+        [Op.lte]: moment().subtract(1, 'days').toDate(),
+      }
+    },
+  })
+    .then(result => {
+      result.forEach(application => {
+        application.update({
+          status: 'vote-review',
+        });
+      });
+
+      res.status(200).send({
+        complete: true,
+        results: result.length,
+      });
     })
     .catch(err => {
       console.log(err);
@@ -398,4 +430,5 @@ module.exports = {
   giveTags,
   completeApplication,
   promoteApplicant,
+  processVotingApplications,
 };
