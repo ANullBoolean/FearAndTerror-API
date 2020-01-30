@@ -226,9 +226,9 @@ const updateApplication = (req, res) => {
   if (status === 'pending-interview') {
     // /applicant/welcome
 
-    axios.get(`http://api.fearandterror.com:4500/applicant/welcome`, {
+    axios.get(`http://localhost:4500/applicant/welcome`, {
       params: {
-        token: config.token,
+        token: config.apiToken,
         uid: req.body.uid,
       }
     }).catch(err => {
@@ -237,9 +237,9 @@ const updateApplication = (req, res) => {
   }
 
   if (status === 'denied') {
-    axios.get(`http://api.fearandterror.com:4500/applicant/denied`, {
+    axios.get(`http://localhost:4500/applicant/denied`, {
       params: {
-        token: config.token,
+        token: config.apiToken,
         uid: req.body.uid,
       }
     }).catch(err => {
