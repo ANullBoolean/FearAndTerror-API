@@ -81,6 +81,7 @@ const getApplications = (req, res) => {
       'username',
       'status',
       'age',
+      'votes',
       'upvotes',
       'downvotes',
       'createdAt',
