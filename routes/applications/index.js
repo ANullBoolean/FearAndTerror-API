@@ -406,8 +406,6 @@ const completeApplication = (req, res) => {
           guild: '398543362476605441',
         },
       }).then(result => {
-
-
         axios.get(`http://api.fearandterror.com:4500/applicant/completed`, {
           params: {
             steamId,
@@ -424,7 +422,7 @@ const completeApplication = (req, res) => {
             });
           })
           .catch(err => {
-            // console.log(err);
+            console.log(err);
             res.status(500).send({
               complete: false,
             });
