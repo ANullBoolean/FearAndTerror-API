@@ -259,7 +259,7 @@ const updateApplication = (req, res) => {
   if (status === 'pending-interview') {
     // /applicant/welcome
 
-    axios.get(`http://localhost:4500/applicant/welcome`, {
+    axios.get(`http://api.fearandterror.com:4500/applicant/welcome`, {
       params: {
         token: config.apiToken,
         uid: req.body.uid,
@@ -270,7 +270,7 @@ const updateApplication = (req, res) => {
   }
 
   if (status === 'denied') {
-    axios.get(`http://localhost:4500/applicant/denied`, {
+    axios.get(`http://api.fearandterror.com:4500/applicant/denied`, {
       params: {
         token: config.apiToken,
         uid: req.body.uid,
@@ -406,9 +406,30 @@ const completeApplication = (req, res) => {
           guild: '398543362476605441',
         },
       }).then(result => {
-        res.status(200).send({
-          success: true,
-        });
+
+
+        axios.get(`http://api.fearandterror.com:4500/applicant/completed`, {
+          params: {
+            steamId,
+            military,
+            tz,
+            ambassador: req.user.userId,
+            uid: req.query.userId,
+            token: config.apiToken,
+          }
+        })
+          .then(() => {
+            res.status(200).send({
+              complete: true,
+            });
+          })
+          .catch(err => {
+            // console.log(err);
+            res.status(500).send({
+              complete: false,
+            });
+          });
+
       }).catch(err => {
         res.status(500).send(err);
       });
