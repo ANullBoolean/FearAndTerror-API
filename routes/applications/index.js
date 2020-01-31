@@ -4,11 +4,12 @@ const { User } = require('../../models/User');
 const { Op } = require('sequelize');
 const moment = require('moment');
 
+const { LogEvent } = require('../../methods/EventLog');
+
 const fs = require('fs');
 const config = JSON.parse(fs.readFileSync('config.json'));
 
 const submitApplication = (req, res) => {
-
   const { userId, username, age, why, what, games, bring, skills, length, found } = req.body;
 
   if (!userId || !username || !age || !why || !what || !games || !bring || !skills || !length || !found) {
@@ -36,6 +37,8 @@ const submitApplication = (req, res) => {
     notes: {},
   })
     .then(result => {
+      LogEvent(userId, userId, 'submitted-application', { id: result.dataValues.id });
+
       axios.get(`http://api.fearandterror.com:4500/application`, {
         params: {
           uid: userId,
@@ -178,6 +181,11 @@ const processVotingApplications = (req, res) => {
       result.forEach(application => {
         application.update({
           status: 'vote-review',
+        }).then(() => {
+          LogEvent(application.get('userId'), 'pam', 'updated-application', {
+            id: application.get('id'),
+            status: 'vote-review',
+          });
         });
       });
 
@@ -226,6 +234,11 @@ const voteApplication = (req, res) => {
         statusChange = {
           status: 'vote-review',
         };
+
+        LogEvent(application.get('userId'), 'pam', 'updated-application', {
+          id,
+          status: 'vote-review',
+        });
       }
 
       application.update({
@@ -305,6 +318,11 @@ const updateApplication = (req, res) => {
 
       const application = result[1][0].dataValues;
 
+      LogEvent(application.userId, req.user.userId, 'updated-application', {
+        id: application.id,
+        status: application.status,
+      });
+
       if (application.status !== 'voting' && application.votemessage) {
         axios.get(`http://api.fearandterror.com:4500/application/voting/delete`, {
           params: {
@@ -354,6 +372,11 @@ const promoteApplicant = (req, res) => {
     }
   })
     .then(() => {
+
+      LogEvent(req.query.userId, req.user.userId, 'add-role', {
+        id: '398547748900831234', // Recruit role
+      });
+
       res.status(200).send({
         complete: true,
       });
@@ -394,6 +417,12 @@ const completeApplication = (req, res) => {
     },
   })
     .then(result => {
+
+      LogEvent(userId, req.user.userId, 'complete-application', {
+        id,
+        status,
+      });
+
       User.update({
         steamId,
         military,
@@ -406,6 +435,15 @@ const completeApplication = (req, res) => {
           guild: '398543362476605441',
         },
       }).then(result => {
+
+        LogEvent(userId, req.user.userId, 'update-user', {
+          steamId,
+          military,
+          tz,
+          joindate,
+          ambassador: req.user.userId,
+        });
+
         axios.get(`http://localhost:4500/applicant/completed`, {
           params: {
             steamId,
