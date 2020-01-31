@@ -7,9 +7,6 @@ const LogEvent = (target, caller, action, details) => {
     action,
     details,
   })
-    .then(result => {
-      console.log(result);
-    })
     .catch(err => {
       console.error(err);
     });
