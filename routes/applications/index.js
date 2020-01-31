@@ -55,7 +55,7 @@ const submitApplication = (req, res) => {
         });
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       res.status(500).send({
         error: true,
       });
@@ -94,7 +94,7 @@ const getApplications = (req, res) => {
       res.status(200).send({ ...req.pagination, ...result });
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       res.status(500).send({
         error: true,
       });
@@ -132,7 +132,7 @@ const getUserApplications = (req, res) => {
       res.status(200).send({ ...req.pagination, ...result });
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       res.status(500).send({
         error: true,
       });
@@ -157,7 +157,7 @@ const getApplication = (req, res) => {
       res.status(200).send(result);
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       res.status(500).send({
         error: true,
       });
@@ -187,7 +187,7 @@ const processVotingApplications = (req, res) => {
       });
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       res.status(500).send({
         error: true,
       });
@@ -238,14 +238,14 @@ const voteApplication = (req, res) => {
           res.status(200).send(result);
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
           res.status(500).send({
             error: true,
           });
         });
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       res.status(500).send({
         error: true,
       });
@@ -256,7 +256,7 @@ const updateApplication = (req, res) => {
   const id = req.params.id;
   const status = req.body.status;
 
-  if (status === 'pending-interview') {
+  if (status === 'pending-introduction') {
     // /applicant/welcome
 
     axios.get(`http://api.fearandterror.com:4500/applicant/welcome`, {
@@ -265,7 +265,7 @@ const updateApplication = (req, res) => {
         uid: req.body.uid,
       }
     }).catch(err => {
-      console.log(err);
+      console.error(err);
     });
   }
 
@@ -276,7 +276,7 @@ const updateApplication = (req, res) => {
         uid: req.body.uid,
       }
     }).catch(err => {
-      console.log(err);
+      console.error(err);
     });
   }
 
@@ -313,14 +313,14 @@ const updateApplication = (req, res) => {
           }
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
         });
       }
 
       res.status(200).send(application);
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       res.status(500).send({
         error: true,
       });
@@ -359,7 +359,7 @@ const promoteApplicant = (req, res) => {
       });
     })
     .catch(err => {
-      // console.log(err);
+      error.log(err);
       res.status(500).send({
         complete: false,
       });
@@ -406,13 +406,14 @@ const completeApplication = (req, res) => {
           guild: '398543362476605441',
         },
       }).then(result => {
-        axios.get(`http://api.fearandterror.com:4500/applicant/completed`, {
+        axios.get(`http://localhost:4500/applicant/completed`, {
           params: {
             steamId,
             military,
             tz,
+            userId,
+            uid: userId,
             ambassador: req.user.userId,
-            uid: req.query.userId,
             token: config.apiToken,
           }
         })
@@ -422,17 +423,19 @@ const completeApplication = (req, res) => {
             });
           })
           .catch(err => {
-            console.log(err);
+            console.error(err);
             res.status(500).send({
               complete: false,
             });
           });
 
       }).catch(err => {
+        console.error(err);
         res.status(500).send(err);
       });
     })
     .catch(err => {
+      console.error(err);
       res.status(500).send({
         error: true,
       });
