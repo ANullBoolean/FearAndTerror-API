@@ -180,6 +180,9 @@ const { getSteamUsers, getSteamUserBans } = require('./routes/steam');
 app.get("/v1.0/steam/getUsers", middleware, getSteamUsers);
 app.get("/v1.0/steam/getUserBans", middleware, getSteamUserBans);
 
+const { getUserEventLog } = require('./routes/eventlog');
+app.get("/v1.0/eventlog/:id", middleware, getUserEventLog);
+
 // Start out server :)
 
 app.listen(APIPort, () => {

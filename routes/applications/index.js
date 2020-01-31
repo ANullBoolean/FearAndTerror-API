@@ -37,7 +37,7 @@ const submitApplication = (req, res) => {
     notes: {},
   })
     .then(result => {
-      LogEvent(userId, userId, 'submitted-application', { id: result.dataValues.id });
+      LogEvent(userId, userId, username, 'submitted-application', { id: result.dataValues.id });
 
       axios.get(`http://api.fearandterror.com:4500/application`, {
         params: {
@@ -182,7 +182,7 @@ const processVotingApplications = (req, res) => {
         application.update({
           status: 'vote-review',
         }).then(() => {
-          LogEvent(application.get('userId'), 'pam', 'updated-application', {
+          LogEvent(application.get('userId'), 'pam', 'Automated', 'updated-application', {
             id: application.get('id'),
             status: 'vote-review',
           });
@@ -235,7 +235,7 @@ const voteApplication = (req, res) => {
           status: 'vote-review',
         };
 
-        LogEvent(application.get('userId'), 'pam', 'updated-application', {
+        LogEvent(application.get('userId'), 'pam', 'Automated', 'updated-application', {
           id,
           status: 'vote-review',
         });
@@ -318,7 +318,7 @@ const updateApplication = (req, res) => {
 
       const application = result[1][0].dataValues;
 
-      LogEvent(application.userId, req.user.userId, 'updated-application', {
+      LogEvent(application.userId, req.user.userId, req.user.nickname || req.user.username, 'updated-application', {
         id: application.id,
         status: application.status,
       });
@@ -373,7 +373,7 @@ const promoteApplicant = (req, res) => {
   })
     .then(() => {
 
-      LogEvent(req.query.userId, req.user.userId, 'add-role', {
+      LogEvent(req.query.userId, req.user.userId, req.user.nickname || req.user.username, 'add-role', {
         id: '398547748900831234', // Recruit role
       });
 
@@ -418,7 +418,7 @@ const completeApplication = (req, res) => {
   })
     .then(result => {
 
-      LogEvent(userId, req.user.userId, 'complete-application', {
+      LogEvent(userId, req.user.userId, req.user.nickname || req.user.username, 'complete-application', {
         id,
         status,
       });
@@ -436,7 +436,7 @@ const completeApplication = (req, res) => {
         },
       }).then(result => {
 
-        LogEvent(userId, req.user.userId, 'update-user', {
+        LogEvent(userId, req.user.userId, req.user.nickname || req.user.username, 'update-user', {
           steamId,
           military,
           tz,

@@ -4,6 +4,7 @@ const { Database } = require('../structures/PostgreSQL');
 const EventLog = Database.db.define('eventLog', {
   target: Sequelize.STRING,
   caller: Sequelize.STRING,
+  callerName: Sequelize.STRING,
   action: {
 		type: Sequelize.ENUM,
 		values: [

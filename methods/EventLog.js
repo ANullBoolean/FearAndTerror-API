@@ -1,9 +1,10 @@
 const { EventLog } = require('../models/EventLog');
 
-const LogEvent = (target, caller, action, details) => {
+const LogEvent = (target, caller, callerName, action, details) => {
   EventLog.create({
     target,
     caller,
+    callerName,
     action,
     details,
   })
