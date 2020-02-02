@@ -55,6 +55,7 @@ const middleware = (req, res, next) => {
         }
 
         req.user = result[0];
+        req.user.name = req.user.name;
 
         next();
       }).catch(err => {

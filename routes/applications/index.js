@@ -318,7 +318,7 @@ const updateApplication = (req, res) => {
 
       const application = result[1][0].dataValues;
 
-      LogEvent(application.userId, req.user.userId, req.user.nickname || req.user.username, 'updated-application', {
+      LogEvent(application.userId, req.user.userId, req.user.name, 'updated-application', {
         id: application.id,
         status: application.status,
       });
@@ -373,7 +373,7 @@ const promoteApplicant = (req, res) => {
   })
     .then(() => {
 
-      LogEvent(req.query.userId, req.user.userId, req.user.nickname || req.user.username, 'add-role', {
+      LogEvent(req.query.userId, req.user.userId, req.user.name, 'add-role', {
         id: '398547748900831234', // Recruit role
       });
 
@@ -418,7 +418,7 @@ const completeApplication = (req, res) => {
   })
     .then(result => {
 
-      LogEvent(userId, req.user.userId, req.user.nickname || req.user.username, 'complete-application', {
+      LogEvent(userId, req.user.userId, req.user.name, 'complete-application', {
         id,
         status,
       });
@@ -436,7 +436,7 @@ const completeApplication = (req, res) => {
         },
       }).then(result => {
 
-        LogEvent(userId, req.user.userId, req.user.nickname || req.user.username, 'update-user', {
+        LogEvent(userId, req.user.userId, req.user.name, 'update-user', {
           steamId,
           military,
           tz,
