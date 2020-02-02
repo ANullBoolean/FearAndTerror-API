@@ -7,6 +7,9 @@ const getUserEventLog = (req, res) => {
     where: {
       target,
     },
+    order: [
+      [ 'id', 'DESC' ],
+    ],
   }).then(result => {
     res.status(200).send(result);
   }).catch(err => {

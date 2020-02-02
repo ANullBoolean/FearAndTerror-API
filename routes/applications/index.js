@@ -382,7 +382,7 @@ const promoteApplicant = (req, res) => {
       });
     })
     .catch(err => {
-      error.log(err);
+      console.error(err);
       res.status(500).send({
         complete: false,
       });
