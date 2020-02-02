@@ -183,6 +183,10 @@ app.get("/v1.0/steam/getUserBans", middleware, getSteamUserBans);
 const { getUserEventLog } = require('./routes/eventlog');
 app.get("/v1.0/eventlog/:id", middleware, getUserEventLog);
 
+const { addStaffNote, getStaffNotes } = require('./routes/notes');
+app.post("/v1.0/notes/:userId", middleware, addStaffNote);
+app.get("/v1.0/notes/:userId", middleware, getStaffNotes);
+
 // Start out server :)
 
 app.listen(APIPort, () => {
