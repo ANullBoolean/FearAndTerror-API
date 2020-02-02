@@ -41,13 +41,16 @@ const updateUser = (req, res) => {
     }).then(result => {
       const newValues = { ...user.dataValues };
       const changes = {};
+      const ignore = [ 'joindate', 'createdAt', 'updatedAt' ];
 
       Object.keys(oldValues).forEach(key => {
-        if (oldValues[key] !== newValues[key]) {
-          changes[key] = {
-            old: oldValues[key],
-            new: newValues[key],
-          };
+        if (!ignore.includes(key)) {
+          if (oldValues[key] !== newValues[key]) {
+            changes[key] = {
+              old: oldValues[key],
+              new: newValues[key],
+            };
+          }
         }
       });
 
