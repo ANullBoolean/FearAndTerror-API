@@ -39,7 +39,7 @@ const submitApplication = (req, res) => {
     .then(result => {
       LogEvent(userId, userId, username, 'submitted-application', { id: result.dataValues.id });
 
-      axios.get(`http://api.fearandterror.com:4500/application`, {
+      axios.get(`http://206.189.230.161:4500/application`, {
         params: {
           uid: userId,
           id: result.dataValues.id,
@@ -272,7 +272,7 @@ const updateApplication = (req, res) => {
   if (status === 'pending-introduction') {
     // /applicant/welcome
 
-    axios.get(`http://api.fearandterror.com:4500/applicant/welcome`, {
+    axios.get(`http://206.189.230.161:4500/applicant/welcome`, {
       params: {
         token: config.apiToken,
         uid: req.body.uid,
@@ -283,7 +283,7 @@ const updateApplication = (req, res) => {
   }
 
   if (status === 'denied') {
-    axios.get(`http://api.fearandterror.com:4500/applicant/denied`, {
+    axios.get(`http://206.189.230.161:4500/applicant/denied`, {
       params: {
         token: config.apiToken,
         uid: req.body.uid,
@@ -324,7 +324,7 @@ const updateApplication = (req, res) => {
       });
 
       if (application.status !== 'voting' && application.votemessage) {
-        axios.get(`http://api.fearandterror.com:4500/application/voting/delete`, {
+        axios.get(`http://206.189.230.161:4500/application/voting/delete`, {
           params: {
             id: application.votemessage,
             token: config.apiToken,
@@ -346,7 +346,7 @@ const updateApplication = (req, res) => {
 }
 
 const giveTags = (req, res) => {
-  axios.get(`http://api.fearandterror.com:4500/applicant/channel-signup`, {
+  axios.get(`http://206.189.230.161:4500/applicant/channel-signup`, {
     params: {
       uid: req.query.uid,
       token: config.apiToken,
@@ -365,7 +365,7 @@ const giveTags = (req, res) => {
 }
 
 const promoteApplicant = (req, res) => {
-  axios.get(`http://api.fearandterror.com:4500/applicant/accepted`, {
+  axios.get(`http://206.189.230.161:4500/applicant/accepted`, {
     params: {
       uid: req.query.userId,
       token: config.apiToken,
