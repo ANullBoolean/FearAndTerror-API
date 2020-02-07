@@ -1,6 +1,11 @@
 const moment = require('moment');
 const { Op } = require('sequelize');
 const { VoiceActivity } = require('../../models/VoiceActivity');
+const NodeCache = require('node-cache');
+const cache = new NodeCache({
+  stdTTL: 600,
+  checkperiod: 120,
+});
 
 const getVoice = (req, res) => {
   VoiceActivity.findAll({ ...req.pagination }).then(result => {
@@ -41,6 +46,13 @@ const getChannelVoiceActivity = (req, res) => {
   const days = parseInt(req.query.days || 7);
   const channelId = req.params.channelId;
 
+  const cacheKey = `${channelId}-${days}`;
+  const cachedData = cache.get(cacheKey);
+  
+  if (cachedData) {
+    return res.status(200).send(cachedData);
+  }
+
   VoiceActivity.findAll({
     where: {
       createdAt: {
@@ -77,6 +89,8 @@ const getChannelVoiceActivity = (req, res) => {
     } catch (e) {
       console.log(e);
     }
+
+    cache.set(cacheKey, results);
 
     res.status(200).send(results);
   }).catch(err => {
