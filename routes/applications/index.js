@@ -9,12 +9,12 @@ const { LogEvent } = require('../../methods/EventLog');
 const fs = require('fs');
 const config = JSON.parse(fs.readFileSync('config.json'));
 
-const submitApplication = (req, res) => {
+const submitApplication = (req, res, next) => {
   const { userId, username, age, why, what, games, bring, skills, length, found } = req.body;
 
   if (!userId || !username || !age || !why || !what || !games || !bring || !skills || !length || !found) {
-    res.status(500).send({
-      error: true,
+    res.status(400).send({
+      status: 400,
       message: 'All fields required',
     });
   }
@@ -52,20 +52,17 @@ const submitApplication = (req, res) => {
           });
         })
         .catch(err => {
-          res.status(500).send({
-            complete: false,
-          });
+          console.error(err);
+          next(new Error('Unable to reach discord bot for Application'));
         });
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        error: true,
-      });
+      next(new Error('Failed to create application'));
     });
 };
 
-const getApplications = (req, res) => {
+const getApplications = (req, res, next) => {
   const status = req.query.status || 'voting';
   const userId = req.query.userId || null;
 
@@ -98,18 +95,16 @@ const getApplications = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        error: true,
-      });
+      next(new Error('Applications Query Failed'));
     });
 }
 
-const getUserApplications = (req, res) => {
+const getUserApplications = (req, res, next) => {
   const userId = req.params.id;
 
   if (!userId) {
-    return res.status(500).send({
-      error: true,
+    return res.status(400).send({
+      status: 400,
       message: 'Invalid User Id',
     });
   }
@@ -136,17 +131,15 @@ const getUserApplications = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        error: true,
-      });
+      next(new Error('Applications Query Failed'));
     });
 }
 
-const getApplication = (req, res) => {
+const getApplication = (req, res, next) => {
   const id = req.params.id;
   if (isNaN(id)) {
-    return res.status(500).send({
-      error: true,
+    return res.status(400).send({
+      status: 400,
       message: 'Invalid ID',
     });
   }
@@ -161,14 +154,11 @@ const getApplication = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        error: true,
-      });
+      next(new Error('Application Query Failed'));
     });
 }
 
-
-const processVotingApplications = (req, res) => {
+const processVotingApplications = (req, res, next) => {
   Applications.findAll({
     where: {
       status: 'voting',
@@ -196,19 +186,17 @@ const processVotingApplications = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        error: true,
-      });
+      next(new Error('Applications Query Failed'));
     });
 }
 
-const voteApplication = (req, res) => {
+const voteApplication = (req, res, next) => {
   const id = req.params.id;
   const upvote = req.body.upvote == true ? true : false;
 
   if (isNaN(id)) {
-    return res.status(500).send({
-      error: true,
+    return res.status(400).send({
+      status: 400,
       message: 'Invalid ID',
     });
   }
@@ -252,22 +240,25 @@ const voteApplication = (req, res) => {
         })
         .catch(err => {
           console.error(err);
-          res.status(500).send({
-            error: true,
-          });
+          next(new Error('Failed to update application'));
         });
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        error: true,
-      });
+      next(new Error('Application Query Failed'));
     });
 }
 
-const updateApplication = (req, res) => {
+const updateApplication = (req, res, next) => {
   const id = req.params.id;
   const status = req.body.status;
+
+  if (isNaN(id)) {
+    return res.status(400).send({
+      status: 400,
+      message: 'Invalid ID',
+    });
+  }
 
   if (status === 'pending-introduction') {
     // /applicant/welcome
@@ -279,6 +270,7 @@ const updateApplication = (req, res) => {
       }
     }).catch(err => {
       console.error(err);
+      next(new Error('Applicant Welcome Failed'));
     });
   }
 
@@ -290,13 +282,7 @@ const updateApplication = (req, res) => {
       }
     }).catch(err => {
       console.error(err);
-    });
-  }
-
-  if (isNaN(id)) {
-    return res.status(500).send({
-      error: true,
-      message: 'Invalid ID',
+      next(new Error('Applicant Denied Failed'));
     });
   }
 
@@ -310,8 +296,8 @@ const updateApplication = (req, res) => {
   })
     .then(result => {
       if (result[0] !== 1) {
-        return res.status(200).send({
-          error: true,
+        return res.status(400).send({
+          status: 400,
           message: 'Missing Update Data',
         });
       }
@@ -332,6 +318,7 @@ const updateApplication = (req, res) => {
         })
         .catch(err => {
           console.error(err);
+          next(new Error('Applicant voting delete failed'));
         });
       }
 
@@ -339,13 +326,11 @@ const updateApplication = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        error: true,
-      });
+      next(new Error('Applicant Update Failed'));
     });
 }
 
-const giveTags = (req, res) => {
+const giveTags = (req, res, next) => {
   axios.get(`http://bravo.fearandterror.com:4500/applicant/channel-signup`, {
     params: {
       uid: req.query.uid,
@@ -358,13 +343,12 @@ const giveTags = (req, res) => {
       });
     })
     .catch(err => {
-      res.status(500).send({
-        complete: false,
-      });
+      console.error(err);
+      next(new Error('Applicant Channel Signup Failed'));
     });
 }
 
-const promoteApplicant = (req, res) => {
+const promoteApplicant = (req, res, next) => {
   axios.get(`http://bravo.fearandterror.com:4500/applicant/accepted`, {
     params: {
       uid: req.query.userId,
@@ -372,7 +356,6 @@ const promoteApplicant = (req, res) => {
     }
   })
     .then(() => {
-
       LogEvent(req.query.userId, req.user.userId, req.user.name, 'add-role', {
         id: '398547748900831234', // Recruit role
       });
@@ -383,13 +366,11 @@ const promoteApplicant = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        complete: false,
-      });
+      next(new Error('Applicant Accepted Failed'));
     });
 }
 
-const completeApplication = (req, res) => {
+const completeApplication = (req, res, next) => {
   const id = req.params.id;
 
   const {
@@ -403,8 +384,8 @@ const completeApplication = (req, res) => {
   } = req.body;
 
   if (isNaN(id)) {
-    return res.status(500).send({
-      error: true,
+    return res.status(400).send({
+      status: 400,
       message: 'Invalid ID',
     });
   }
@@ -462,21 +443,17 @@ const completeApplication = (req, res) => {
           })
           .catch(err => {
             console.error(err);
-            res.status(500).send({
-              complete: false,
-            });
+            next(new Error('Application Completed Failed'));
           });
 
       }).catch(err => {
         console.error(err);
-        res.status(500).send(err);
+        next(new Error('User Update Failed'));
       });
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send({
-        error: true,
-      });
+      next(new Error('Application Update Failed'));
     });
 }
 

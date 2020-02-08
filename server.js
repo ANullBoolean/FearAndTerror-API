@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const morgan = require('morgan');
 const fs = require('fs');
 const cors = require('cors');
-const winston = require('winston');
 const io = require('@pm2/io');
-
+const Sentry = require('@sentry/node');
 const config = JSON.parse(fs.readFileSync('config.json'));
+
+Sentry.init({ dsn: config.dsn });
 
 const { middleware, pagination } = require('./middleware');
 const { Database } = require('./structures/PostgreSQL');
@@ -30,12 +30,10 @@ const APIPort = config.port;
 // Create some global analytical variables
 global.avgResponseTime = [];
 
-// Setup our debug logging
-const debugLogging = new winston.transports.Console();
-winston.add(debugLogging);
-
 // Create our express app
 const app = express();
+
+app.use(Sentry.Handlers.requestHandler());
 
 app.use(function(req, res, next) {
   const startHrTime = process.hrtime();
@@ -60,7 +58,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.set('secret', config.secret);
-app.use(morgan('dev'));
 
 /****************
 **  REST API   **
@@ -186,6 +183,16 @@ app.get("/v1.0/eventlog/:id", middleware, getUserEventLog);
 const { addStaffNote, getStaffNotes } = require('./routes/notes');
 app.post("/v1.0/notes/:userId", middleware, addStaffNote);
 app.get("/v1.0/notes/:userId", middleware, getStaffNotes);
+
+// Sentry error handling
+
+app.use(Sentry.Handlers.errorHandler());
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || 'Internal Server Error';
+
+  res.status(status).json({ status, message, sentry: res.sentry });
+});
 
 // Start out server :)
 
